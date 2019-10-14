@@ -18,5 +18,5 @@
 - [x] useCallback()
 - [x] useRef()
 - [x] useReducer()
-- [ ] useContext()
+- [x] useContext()
 - [ ] useMemo()
