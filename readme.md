@@ -17,6 +17,6 @@
 - [x] useEffect()
 - [x] useCallback()
 - [x] useRef()
-- [ ] useReducer()
+- [x] useReducer()
 - [ ] useContext()
 - [ ] useMemo()
