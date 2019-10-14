@@ -63,9 +63,10 @@ const Ingredients = () => {
   // const [userIngredients, setUserIngredients] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState();
+  console.log("----------MAIN INGREDIENTS", userIngredients);
 
   // add
-  const addIngredientHandler = ingredient => {
+  const addIngredientHandler = useCallback(ingredient => {
     // setIsLoading(true);
     dispatchHttp({ type: "SEND" });
     fetch(`${URL}${URL_PATH}`, {
@@ -88,7 +89,7 @@ const Ingredients = () => {
           ingredients: { ...ingredient, id: responseData.name }
         });
       });
-  };
+  }, []);
 
   // query / filter
   const filterIngredientsHandler = useCallback(filteredIngredients => {
@@ -97,7 +98,7 @@ const Ingredients = () => {
   }, []);
 
   // delete
-  const removeIngredientHandler = ingredientId => {
+  const removeIngredientHandler = useCallback(ingredientId => {
     // setIsLoading(true);
     dispatchHttp({ type: "SEND" });
     fetch(`${URL}/ingredients/${ingredientId}.json`, {
@@ -117,14 +118,14 @@ const Ingredients = () => {
         // setError("Something went wrong!!");
         dispatchHttp({ type: "ERROR", errorMessage: "Something went wrong!!" });
       });
-  };
+  }, []);
 
   // clear Error
-  const clearErrorHandler = () => {
+  const clearErrorHandler = useCallback(() => {
     // setError(null);
     // setIsLoading(false);
     dispatchHttp({ type: "CLEAR_ERROR" });
-  };
+  }, []);
 
   return (
     <div className="App">
@@ -143,7 +144,7 @@ const Ingredients = () => {
           urlPath={URL_PATH}
         />
         <IngredientList
-          ingredients={userIngredients || []}
+          ingredients={userIngredients}
           onRemoveItem={removeIngredientHandler}
         />
       </section>

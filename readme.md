@@ -19,4 +19,4 @@
 - [x] useRef()
 - [x] useReducer()
 - [x] useContext()
-- [ ] useMemo()
+- [x] useMemo()
