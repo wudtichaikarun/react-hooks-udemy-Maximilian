@@ -28,7 +28,8 @@ yarn-error.log*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -134,7 +135,6 @@ typings/
 
 # gatsby files
 .cache/
-public
 
 # vuepress build output
 .vuepress/dist
