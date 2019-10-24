@@ -1,12 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import Card from "../UI/Card";
+import ErrorModal from "../UI/ErrorModal";
+import useHttp from "../../hooks/http";
 import "./Search.css";
 
+const URL = process.env.REACT_APP_API_ENDPOINT;
+const URL_PATH = "/ingredients.json";
+
 const Search = React.memo(props => {
-  const { onLoadIngredients, url, urlPath } = props;
+  const { onLoadIngredients } = props;
   const [enteredFilter, setEnteredFilter] = useState("");
   const inputRef = useRef();
+  const { isLoading, data, error, sendRequest, clear } = useHttp();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (enteredFilter === inputRef.current.value) {
@@ -14,33 +21,35 @@ const Search = React.memo(props => {
           enteredFilter.length === 0
             ? ""
             : `?orderBy="title"&equalTo="${enteredFilter}"`;
-        fetch(`${url}${urlPath}${query}`)
-          .then(respose => respose.json())
-          .then(responseData => {
-            const keys = responseData && Object.keys(responseData);
-            const loadedIngredients =
-              responseData &&
-              keys.map(key => ({
-                id: key,
-                title: responseData[key].title,
-                amount: responseData[key].amount
-              }));
-            onLoadIngredients(loadedIngredients);
-          });
+        sendRequest(`${URL}${URL_PATH}${query}`, "GET");
       }
     }, 500);
-
-    // run before timer apply
     return () => {
       clearTimeout(timer);
     };
-  }, [enteredFilter, onLoadIngredients, inputRef, url, urlPath]);
+  }, [enteredFilter, inputRef, sendRequest]);
+
+  useEffect(() => {
+    if (!isLoading && !error && data) {
+      const loadedIngredients = [];
+      for (const key in data) {
+        loadedIngredients.push({
+          id: key,
+          title: data[key].title,
+          amount: data[key].amount
+        });
+      }
+      onLoadIngredients(loadedIngredients);
+    }
+  }, [data, isLoading, error, onLoadIngredients]);
 
   return (
     <section className="search">
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
       <Card>
         <div className="search-input">
           <label>Filter by Title</label>
+          {isLoading && <span>Loading...</span>}
           <input
             ref={inputRef}
             type="text"
