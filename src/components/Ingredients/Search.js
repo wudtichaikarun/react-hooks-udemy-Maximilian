@@ -5,11 +5,8 @@ import ErrorModal from "../UI/ErrorModal";
 import useHttp from "../../hooks/http";
 import "./Search.css";
 
-const URL = process.env.REACT_APP_API_ENDPOINT;
-const URL_PATH = "/ingredients.json";
-
 const Search = React.memo(props => {
-  const { onLoadIngredients } = props;
+  const { onLoadIngredients, url, urlPath } = props;
   const [enteredFilter, setEnteredFilter] = useState("");
   const inputRef = useRef();
   const { isLoading, data, error, sendRequest, clear } = useHttp();
@@ -21,13 +18,13 @@ const Search = React.memo(props => {
           enteredFilter.length === 0
             ? ""
             : `?orderBy="title"&equalTo="${enteredFilter}"`;
-        sendRequest(`${URL}${URL_PATH}${query}`, "GET");
+        sendRequest(`${url}${urlPath}${query}`, "GET");
       }
     }, 500);
     return () => {
       clearTimeout(timer);
     };
-  }, [enteredFilter, inputRef, sendRequest]);
+  }, [enteredFilter, inputRef, sendRequest, url, urlPath]);
 
   useEffect(() => {
     if (!isLoading && !error && data) {
