@@ -16,7 +16,7 @@ const ingredientReducer = (currentIngreients, action) => {
       return action.ingredients;
     },
     ADD: () => {
-      return [...currentIngreients, action.ingredients];
+      return [...currentIngreients, action.ingredient];
     },
     DELETE: () => {
       return currentIngreients.filter(ing => ing.id !== action.id);
@@ -32,6 +32,8 @@ const ingredientReducer = (currentIngreients, action) => {
 
 const Ingredients = () => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
+  console.log("userIngredients", userIngredients);
+
   const {
     isLoading,
     error,
@@ -101,10 +103,12 @@ const Ingredients = () => {
           url={URL}
           urlPath={URL_PATH}
         />
-        <IngredientList
-          ingredients={userIngredients}
-          onRemoveItem={removeIngredientHandler}
-        />
+        {!isLoading && (
+          <IngredientList
+            ingredients={userIngredients}
+            onRemoveItem={removeIngredientHandler}
+          />
+        )}
       </section>
     </div>
   );
